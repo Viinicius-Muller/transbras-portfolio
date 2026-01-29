@@ -1,4 +1,4 @@
-package com.viniciusmuller.transbras;
+package com.muller.transbras;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

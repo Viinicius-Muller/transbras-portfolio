@@ -1,4 +1,4 @@
-package com.viniciusmuller.transbras;
+package com.muller.transbras;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
