@@ -1,5 +1,6 @@
-package com.muller.transbras.auth;
+package com.muller.transbras.auth.controller;
 
+import com.muller.transbras.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
+    private final AuthService authService;
+
     @PostMapping("/login")
     public ResponseEntity login() {
         return ResponseEntity.status(HttpStatus.OK).build();
