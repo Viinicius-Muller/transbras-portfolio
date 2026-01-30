@@ -1,6 +1,10 @@
 package com.muller.transbras.auth.controller;
 
+import com.muller.transbras.auth.dto.LoginDTO;
+import com.muller.transbras.auth.dto.RegisterDTO;
+import com.muller.transbras.auth.dto.UpdateDTO;
 import com.muller.transbras.auth.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +17,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity login() {
+    public ResponseEntity login(@RequestBody @Valid LoginDTO dto) {
+        authService.loginUser(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/register")
-    public ResponseEntity register() {
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO dto) {
+        authService.registerUser(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -28,7 +34,9 @@ public class AuthController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable String id) {
+    public ResponseEntity update(@PathVariable String id,
+                                 @RequestBody @Valid UpdateDTO dto) {
+        authService.updateUser(dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
