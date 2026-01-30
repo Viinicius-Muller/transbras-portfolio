@@ -31,8 +31,9 @@ public class User implements UserDetails {
         return List.of();
     }
 
-    public void updateUser() {
-        System.out.println("User updated");
+    public void updateUser(String username, String password) {
+        if (!username.isBlank()) this.username = username;
+        if (!password.isBlank()) this.password = password;
     }
 
     @Override

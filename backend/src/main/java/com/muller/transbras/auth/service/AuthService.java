@@ -31,8 +31,14 @@ public class AuthService {
     }
 
     @Transactional
-    public void updateUser(UpdateDTO dto) {
-        System.out.println("User info updated");
+    public void updateUser(Long id, UpdateDTO dto) throws Exception {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("User not found", User.class));
+
+        if (user.getPassword() != dto.password()) throw new Exception("Wrong credentials");
+        user.updateUser(dto.username(), dto.password());
+
+        userRepository.save(user);
     }
 
     @Transactional
