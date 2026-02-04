@@ -1,19 +1,17 @@
 package com.muller.transbras.auth.service;
 
-import com.muller.transbras.auth.dto.ListUserDTO;
-import com.muller.transbras.auth.dto.LoginDTO;
-import com.muller.transbras.auth.dto.RegisterDTO;
-import com.muller.transbras.auth.dto.UpdateDTO;
+import com.muller.transbras.auth.dto.*;
+import com.muller.transbras.auth.infra.security.TokenService;
 import com.muller.transbras.auth.model.User;
 import com.muller.transbras.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,13 +19,35 @@ public class AuthService {
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TokenService tokenService;
+
     @Transactional
-    public void registerUser(RegisterDTO dto) {
-        System.out.println("New user registered");
+    public ResponseDTO registerUser(RegisterDTO dto) {
+        User user = new User();
+        String encodedPass = passwordEncoder.encode(dto.password());
+
+        user.setUsername(dto.username());
+        user.setPassword(dto.password());
+
+        var token = tokenService.generateToken(user);
+        userRepository.save(user);
+
+        return new ResponseDTO(user.getUsername(), token);
     }
 
-    public void loginUser(LoginDTO dto) {
-        System.out.println("User logged in");
+    public ResponseDTO loginUser(LoginDTO dto) {
+        User user = userRepository.findByUsername(dto.username())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (passwordEncoder.matches(dto.password(), user.getPassword())) {
+            var token = tokenService.generateToken(user);
+            return new ResponseDTO(user.getUsername(), token);
+        }
+        throw new RuntimeException("Username or Password are incorrect");
     }
 
     @Transactional

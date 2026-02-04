@@ -1,9 +1,6 @@
 package com.muller.transbras.auth.controller;
 
-import com.muller.transbras.auth.dto.ListUserDTO;
-import com.muller.transbras.auth.dto.LoginDTO;
-import com.muller.transbras.auth.dto.RegisterDTO;
-import com.muller.transbras.auth.dto.UpdateDTO;
+import com.muller.transbras.auth.dto.*;
 import com.muller.transbras.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,26 +20,26 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginDTO dto) {
-        authService.loginUser(dto);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        ResponseDTO responseDTO = authService.loginUser(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO dto) {
-        authService.registerUser(dto);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        ResponseDTO responseDTO = authService.registerUser(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable String id) {
+    public ResponseEntity delete(@PathVariable Long id) {
         authService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable String id,
-                                 @RequestBody @Valid UpdateDTO dto) {
-        authService.updateUser(dto);
+    public ResponseEntity update(@PathVariable Long id,
+                                 @RequestBody @Valid UpdateDTO dto) throws Exception {
+        authService.updateUser(id, dto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
