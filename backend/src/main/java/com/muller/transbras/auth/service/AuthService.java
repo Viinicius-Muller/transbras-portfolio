@@ -3,6 +3,7 @@ package com.muller.transbras.auth.service;
 import com.muller.transbras.auth.dto.*;
 import com.muller.transbras.auth.infra.security.TokenService;
 import com.muller.transbras.auth.model.User;
+import com.muller.transbras.auth.model.UserRole;
 import com.muller.transbras.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,9 @@ public class AuthService {
 
         user.setUsername(dto.username());
         user.setPassword(encodedPass);
+
+        if(dto.username() == "adminn") user.setRole(UserRole.ADMIN);
+        else user.setRole(UserRole.USER);
 
         var token = tokenService.generateToken(user);
         userRepository.save(user);

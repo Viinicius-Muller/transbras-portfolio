@@ -26,9 +26,13 @@ public class User implements UserDetails {
     @Size(min = 6, max = 70, message = "Password must be 5 to 70 chars")
     private String password;
 
+    @Column(nullable = false)
+    private UserRole role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if (this.role == UserRole.ADMIN) return List.of(() -> "ROLE_ADMIN", () -> "ROLE_USER");
+        return List.of(() -> "ROLE_USER");
     }
 
     public void updateUser(String username, String password) {
