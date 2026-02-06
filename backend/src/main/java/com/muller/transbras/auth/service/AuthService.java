@@ -31,7 +31,7 @@ public class AuthService {
         String encodedPass = passwordEncoder.encode(dto.password());
 
         user.setUsername(dto.username());
-        user.setPassword(dto.password());
+        user.setPassword(encodedPass);
 
         var token = tokenService.generateToken(user);
         userRepository.save(user);

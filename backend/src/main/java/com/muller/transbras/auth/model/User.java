@@ -18,11 +18,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 50)
     @Size(min = 6, max = 50, message = "Username must be 5 to 50 chars")
     private String username;
 
-    @Column(name = "password", nullable = false, length = 70)
+    @Column(nullable = false, length = 70)
     @Size(min = 6, max = 70, message = "Password must be 5 to 70 chars")
     private String password;
 
@@ -38,12 +38,12 @@ public class User implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "";
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return this.username;
     }
 
     @Override
