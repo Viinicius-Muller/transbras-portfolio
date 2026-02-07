@@ -36,8 +36,8 @@ public class User implements UserDetails {
     }
 
     public void updateUser(String username, String password) {
-        if (!username.isBlank()) this.username = username;
-        if (!password.isBlank()) this.password = password;
+        if (username != null) this.username = username;
+        if (password != null) this.password = password;
     }
 
     @Override

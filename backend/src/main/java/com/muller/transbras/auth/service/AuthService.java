@@ -1,13 +1,14 @@
 package com.muller.transbras.auth.service;
 
 import com.muller.transbras.auth.dto.*;
+import com.muller.transbras.auth.exception.IncorrectCredentialsException;
+import com.muller.transbras.auth.exception.UserNotFoundException;
 import com.muller.transbras.auth.infra.security.TokenService;
 import com.muller.transbras.auth.model.User;
 import com.muller.transbras.auth.model.UserRole;
 import com.muller.transbras.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,29 +46,30 @@ public class AuthService {
 
     public ResponseDTO loginUser(LoginDTO dto) {
         User user = userRepository.findByUsername(dto.username())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (passwordEncoder.matches(dto.password(), user.getPassword())) {
             var token = tokenService.generateToken(user);
             return new ResponseDTO(user.getUsername(), token);
         }
-        throw new RuntimeException("Username or Password are incorrect");
+        throw new IncorrectCredentialsException("Username or Password are incorrect");
     }
 
     @Transactional
     public void updateUser(Long id, UpdateDTO dto) throws Exception {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException("User not found", User.class));
+                () -> new UserNotFoundException("User not found"));
 
-        if (user.getPassword() != dto.password()) throw new Exception("Wrong credentials");
-        user.updateUser(dto.username(), dto.password());
+        String encodedPass = passwordEncoder.encode(dto.password());
+        System.out.println(encodedPass);
+        user.updateUser(dto.username(), encodedPass);
 
         userRepository.save(user);
     }
 
     @Transactional
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) throw new ObjectNotFoundException("User not found", User.class);
+        if (!userRepository.existsById(id)) throw new UserNotFoundException("User not found");
         userRepository.deleteById(id);
     }
 
