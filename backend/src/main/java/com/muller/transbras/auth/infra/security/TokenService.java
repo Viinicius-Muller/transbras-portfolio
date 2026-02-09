@@ -23,7 +23,9 @@ public class TokenService {
         String token = JWT.create()
                 .withIssuer("transbras-auth-service")
                 .withSubject(user.getUsername())
-                .withClaim("userId", user.getId())
+                .withClaim("id", user.getId())
+                .withClaim("username", user.getUsername())
+                .withClaim("role", user.getRole().toString())
                 .withExpiresAt(this.generateExpiration())
                 .sign(algorithm);
 
