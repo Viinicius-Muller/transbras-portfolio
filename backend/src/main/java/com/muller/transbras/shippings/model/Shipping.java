@@ -1,6 +1,8 @@
 package com.muller.transbras.shippings.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.time.Instant;
@@ -29,8 +31,12 @@ public class Shipping {
     private String cargoType;
 
     @Column(nullable = false)
+    @Min(1)
+    @Max(1000000)
     private Integer weight;
 
     @Column(nullable = false)
+    @Min(20)
+    @Max(10000)
     private Integer distance;
 }
