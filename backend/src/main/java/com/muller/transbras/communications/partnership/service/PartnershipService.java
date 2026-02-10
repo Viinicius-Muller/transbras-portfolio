@@ -4,8 +4,8 @@ import com.muller.transbras.communications.exceptions.MessageNotFoundException;
 import com.muller.transbras.communications.partnership.dto.ListPartnershipMsgDTO;
 import com.muller.transbras.communications.partnership.dto.NewPartershipMsgDTO;
 import com.muller.transbras.communications.partnership.model.Partnership;
+import com.muller.transbras.communications.partnership.repository.PartnershipRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

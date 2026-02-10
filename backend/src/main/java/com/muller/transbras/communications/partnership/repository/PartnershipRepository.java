@@ -1,4 +1,4 @@
-package com.muller.transbras.communications.partnership.service;
+package com.muller.transbras.communications.partnership.repository;
 
 import com.muller.transbras.communications.partnership.model.Partnership;
 import org.springframework.data.jpa.repository.JpaRepository;

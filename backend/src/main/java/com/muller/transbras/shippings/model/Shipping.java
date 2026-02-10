@@ -1,5 +1,6 @@
 package com.muller.transbras.shippings.model;
 
+import com.muller.transbras.communications.offers.model.Offer;
 import com.muller.transbras.shippings.dto.UpdateShippingDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "shippings")
@@ -15,6 +18,9 @@ public class Shipping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "shipping", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Offer> offers = new ArrayList<>();
 
     @Column(nullable = false)
     private Instant scheduledDate;
