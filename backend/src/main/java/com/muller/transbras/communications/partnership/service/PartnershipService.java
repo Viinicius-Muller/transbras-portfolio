@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PartnershipService {
     @Autowired
@@ -28,5 +30,15 @@ public class PartnershipService {
 
         partnershipRepository.save(partnership);
         return new ListPartnershipMsgDTO(partnership);
+    }
+
+    @Transactional
+    public void deleteMessage(Long id) {
+        if (!partnershipRepository.existsById(id)) throw new RuntimeException("Message not found with id: " + id);
+        partnershipRepository.deleteById(id);
+    }
+
+    public List<ListPartnershipMsgDTO> getMessages() {
+        return partnershipRepository.findAll().stream().map(ListPartnershipMsgDTO::new).toList();
     }
 }
