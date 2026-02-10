@@ -21,10 +21,10 @@ public class Shipping {
     @Column(nullable = false)
     private Instant createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "origin", nullable = false)
     private String from;
 
-    @Column(nullable = false)
+    @Column(name = "destination", nullable = false)
     private String to;
 
     @Column(nullable = false)

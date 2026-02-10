@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +30,10 @@ public class ShippingService {
 
         shippingRepository.save(shipping);
         return new ListShippingDTO(shipping);
+    }
+
+    public List<ListShippingDTO> getShippings() {
+        List<Shipping> shippings = shippingRepository.findAll();
+        return shippings.stream().map(ListShippingDTO::new).toList();
     }
 }
