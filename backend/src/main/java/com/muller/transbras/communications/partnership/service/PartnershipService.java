@@ -1,5 +1,6 @@
 package com.muller.transbras.communications.partnership.service;
 
+import com.muller.transbras.communications.exceptions.MessageNotFoundException;
 import com.muller.transbras.communications.partnership.dto.ListPartnershipMsgDTO;
 import com.muller.transbras.communications.partnership.dto.NewPartershipMsgDTO;
 import com.muller.transbras.communications.partnership.model.Partnership;
@@ -34,7 +35,8 @@ public class PartnershipService {
 
     @Transactional
     public void deleteMessage(Long id) {
-        if (!partnershipRepository.existsById(id)) throw new RuntimeException("Message not found with id: " + id);
+        if (!partnershipRepository.existsById(id))
+            throw new MessageNotFoundException("Message not found with id: " + id);
         partnershipRepository.deleteById(id);
     }
 

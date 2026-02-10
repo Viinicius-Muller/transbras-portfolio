@@ -3,6 +3,7 @@ package com.muller.transbras;
 import com.muller.transbras.auth.exception.IncorrectCredentialsException;
 import com.muller.transbras.auth.exception.UserNotFoundException;
 import com.muller.transbras.auth.exception.UsernameAlreadyTakenException;
+import com.muller.transbras.communications.exceptions.MessageNotFoundException;
 import com.muller.transbras.shippings.exceptions.BadScheduledDateException;
 import com.muller.transbras.shippings.exceptions.ShippingNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -68,6 +69,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ShippingNotFoundException.class)
     private ResponseEntity<Map<String, Object>> handleShippingNotFound(ShippingNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", Instant.now());
+        body.put("status", HttpStatus.NOT_FOUND);
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(404).body(body);
+    }
+
+    @ExceptionHandler(MessageNotFoundException.class)
+    private ResponseEntity<Map<String, Object>> handleMessageNotFound(MessageNotFoundException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.NOT_FOUND);
