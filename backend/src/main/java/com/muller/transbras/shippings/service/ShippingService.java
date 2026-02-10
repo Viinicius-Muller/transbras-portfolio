@@ -36,4 +36,10 @@ public class ShippingService {
         List<Shipping> shippings = shippingRepository.findAll();
         return shippings.stream().map(ListShippingDTO::new).toList();
     }
+
+    public void deleteShipping(Long id) {
+        if (!shippingRepository.existsById(id))
+            throw new RuntimeException("No Shipping with this Id");
+        shippingRepository.deleteById(id);
+    }
 }

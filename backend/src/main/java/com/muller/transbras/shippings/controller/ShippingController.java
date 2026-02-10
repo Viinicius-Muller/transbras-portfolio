@@ -24,8 +24,15 @@ public class ShippingController {
         return ResponseEntity.ok().body(newShippingData);
     }
 
-    @GetMapping ResponseEntity listShippings() {
+    @GetMapping
+    ResponseEntity get() {
         List<ListShippingDTO> shippings = shippingService.getShippings();
         return ResponseEntity.ok().body(shippings);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity delete(@PathVariable Long id) {
+        shippingService.deleteShipping(id);
+        return ResponseEntity.ok().body("Shipping deleted: "+id);
     }
 }
