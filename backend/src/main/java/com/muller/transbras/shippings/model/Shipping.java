@@ -1,5 +1,6 @@
 package com.muller.transbras.shippings.model;
 
+import com.muller.transbras.shippings.dto.UpdateShippingDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -39,4 +40,13 @@ public class Shipping {
     @Min(20)
     @Max(10000)
     private Integer distance;
+
+    public void update(UpdateShippingDTO dto) {
+        if (dto.scheduledDate() != null) this.scheduledDate = dto.scheduledDate();
+        if (dto.from() != null) this.from = dto.from();
+        if (dto.to() != null) this.to = dto.to();
+        if (dto.cargoType() != null) this.cargoType = dto.cargoType();
+        if (dto.weight() != null) this.weight = dto.weight();
+        if (dto.distance() != null) this.distance = dto.distance();
+    }
 }

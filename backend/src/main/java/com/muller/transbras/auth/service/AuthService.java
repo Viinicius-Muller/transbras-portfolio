@@ -30,12 +30,13 @@ public class AuthService {
     @Transactional
     public ResponseDTO registerUser(RegisterDTO dto) {
         User user = new User();
+        if (userRepository.existsByUsername(dto.username())) throw new RuntimeException("Username already taken");
         String encodedPass = passwordEncoder.encode(dto.password());
 
         user.setUsername(dto.username());
         user.setPassword(encodedPass);
 
-        if(dto.username() == "adminn") user.setRole(UserRole.ADMIN);
+        if(dto.username().equals("adminn")) user.setRole(UserRole.ADMIN);
         else user.setRole(UserRole.USER);
 
         var token = tokenService.generateToken(user);
@@ -61,7 +62,6 @@ public class AuthService {
                 () -> new UserNotFoundException("User not found"));
 
         String encodedPass = passwordEncoder.encode(dto.password());
-        System.out.println(encodedPass);
         user.updateUser(dto.username(), encodedPass);
 
         userRepository.save(user);

@@ -2,6 +2,7 @@ package com.muller.transbras.shippings.controller;
 
 import com.muller.transbras.shippings.dto.ListShippingDTO;
 import com.muller.transbras.shippings.dto.NewShippingDTO;
+import com.muller.transbras.shippings.dto.UpdateShippingDTO;
 import com.muller.transbras.shippings.service.ShippingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +26,19 @@ public class ShippingController {
     }
 
     @GetMapping
-    ResponseEntity get() {
+    public ResponseEntity get() {
         List<ListShippingDTO> shippings = shippingService.getShippings();
         return ResponseEntity.ok().body(shippings);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity update(@PathVariable Long id, @RequestBody @Valid UpdateShippingDTO dto) {
+        ListShippingDTO updatedShippingData = shippingService.updateShipping(id, dto);
+        return ResponseEntity.ok().body(updatedShippingData);
+    }
+
     @DeleteMapping("/{id}")
-    ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity delete(@PathVariable Long id) {
         shippingService.deleteShipping(id);
         return ResponseEntity.ok().body("Shipping deleted: "+id);
     }

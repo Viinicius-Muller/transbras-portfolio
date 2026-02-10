@@ -2,8 +2,10 @@ package com.muller.transbras.shippings.service;
 
 import com.muller.transbras.shippings.dto.ListShippingDTO;
 import com.muller.transbras.shippings.dto.NewShippingDTO;
+import com.muller.transbras.shippings.dto.UpdateShippingDTO;
 import com.muller.transbras.shippings.model.Shipping;
 import com.muller.transbras.shippings.repository.ShippingRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class ShippingService {
     @Autowired
     private final ShippingRepository shippingRepository;
 
+    @Transactional
     public ListShippingDTO createShipping(NewShippingDTO dto) {
         Shipping shipping = new Shipping();
 
@@ -33,13 +36,23 @@ public class ShippingService {
     }
 
     public List<ListShippingDTO> getShippings() {
-        List<Shipping> shippings = shippingRepository.findAll();
-        return shippings.stream().map(ListShippingDTO::new).toList();
+        return shippingRepository.findAll().stream().map(ListShippingDTO::new).toList();
     }
 
+    @Transactional
     public void deleteShipping(Long id) {
         if (!shippingRepository.existsById(id))
             throw new RuntimeException("No Shipping with this Id");
         shippingRepository.deleteById(id);
+    }
+
+    @Transactional
+    public ListShippingDTO updateShipping(Long id, UpdateShippingDTO dto){
+        Shipping shipping = shippingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Shipping with this Id"));
+        shipping.update(dto);
+        shippingRepository.save(shipping);
+
+        return new ListShippingDTO(shipping);
     }
 }
