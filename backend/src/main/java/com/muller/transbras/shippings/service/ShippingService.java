@@ -3,6 +3,8 @@ package com.muller.transbras.shippings.service;
 import com.muller.transbras.shippings.dto.ListShippingDTO;
 import com.muller.transbras.shippings.dto.NewShippingDTO;
 import com.muller.transbras.shippings.dto.UpdateShippingDTO;
+import com.muller.transbras.shippings.exceptions.BadScheduledDateException;
+import com.muller.transbras.shippings.exceptions.ShippingNotFoundException;
 import com.muller.transbras.shippings.model.Shipping;
 import com.muller.transbras.shippings.repository.ShippingRepository;
 import jakarta.transaction.Transactional;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -21,6 +24,8 @@ public class ShippingService {
 
     @Transactional
     public ListShippingDTO createShipping(NewShippingDTO dto) {
+        if (Instant.now().plus(1, ChronoUnit.DAYS).isAfter(dto.scheduledDate()))
+            throw new BadScheduledDateException("Scheduled date must be at least 24 hours in the future");
         Shipping shipping = new Shipping();
 
         shipping.setCreatedAt(Instant.now());
@@ -42,14 +47,17 @@ public class ShippingService {
     @Transactional
     public void deleteShipping(Long id) {
         if (!shippingRepository.existsById(id))
-            throw new RuntimeException("No Shipping with this Id");
+            throw new ShippingNotFoundException("No Shipping with this Id");
         shippingRepository.deleteById(id);
     }
 
     @Transactional
     public ListShippingDTO updateShipping(Long id, UpdateShippingDTO dto){
+        if (Instant.now().plus(1, ChronoUnit.DAYS).isAfter(dto.scheduledDate()))
+            throw new BadScheduledDateException("Scheduled date must be at least 24 hours in the future");
+
         Shipping shipping = shippingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No Shipping with this Id"));
+                .orElseThrow(() -> new ShippingNotFoundException("No Shipping with this Id"));
         shipping.update(dto);
         shippingRepository.save(shipping);
 

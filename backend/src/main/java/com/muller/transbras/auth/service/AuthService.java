@@ -3,6 +3,7 @@ package com.muller.transbras.auth.service;
 import com.muller.transbras.auth.dto.*;
 import com.muller.transbras.auth.exception.IncorrectCredentialsException;
 import com.muller.transbras.auth.exception.UserNotFoundException;
+import com.muller.transbras.auth.exception.UsernameAlreadyTakenException;
 import com.muller.transbras.auth.infra.security.TokenService;
 import com.muller.transbras.auth.model.User;
 import com.muller.transbras.auth.model.UserRole;
@@ -30,7 +31,7 @@ public class AuthService {
     @Transactional
     public ResponseDTO registerUser(RegisterDTO dto) {
         User user = new User();
-        if (userRepository.existsByUsername(dto.username())) throw new RuntimeException("Username already taken");
+        if (userRepository.existsByUsername(dto.username())) throw new UsernameAlreadyTakenException("Username already taken");
         String encodedPass = passwordEncoder.encode(dto.password());
 
         user.setUsername(dto.username());
