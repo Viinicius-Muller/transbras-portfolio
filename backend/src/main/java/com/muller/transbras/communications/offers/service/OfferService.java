@@ -4,6 +4,7 @@ import com.muller.transbras.communications.exceptions.MessageNotFoundException;
 import com.muller.transbras.communications.offers.dto.ListOfferDTO;
 import com.muller.transbras.communications.offers.dto.NewOfferDTO;
 import com.muller.transbras.communications.offers.dto.UpdateStatusDTO;
+import com.muller.transbras.communications.offers.exception.OfferNotFoundException;
 import com.muller.transbras.communications.offers.model.Offer;
 import com.muller.transbras.communications.offers.model.Status;
 import com.muller.transbras.communications.offers.repository.OfferRepository;
@@ -44,7 +45,7 @@ public class OfferService {
     @Transactional
     public void deleteOffer(Long id) {
         if (!offerRepository.existsById(id))
-            throw new MessageNotFoundException("Offer not found with id: " + id);
+            throw new OfferNotFoundException("Offer not found with id: " + id);
         offerRepository.deleteById(id);
     }
 
@@ -55,7 +56,7 @@ public class OfferService {
     @Transactional
     public void updateOfferStatus(Long id, UpdateStatusDTO dto) {
         Offer offer = offerRepository.findById(id)
-                .orElseThrow(() -> new MessageNotFoundException("Offer not found with id: " + id));
+                .orElseThrow(() -> new OfferNotFoundException("Offer not found with id: " + id));
         offer.setStatus(dto.status());
         offerRepository.save(offer);
     }

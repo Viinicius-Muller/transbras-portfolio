@@ -4,8 +4,10 @@ import com.muller.transbras.auth.exception.IncorrectCredentialsException;
 import com.muller.transbras.auth.exception.UserNotFoundException;
 import com.muller.transbras.auth.exception.UsernameAlreadyTakenException;
 import com.muller.transbras.communications.exceptions.MessageNotFoundException;
+import com.muller.transbras.communications.offers.exception.OfferNotFoundException;
 import com.muller.transbras.shippings.exceptions.BadScheduledDateException;
 import com.muller.transbras.shippings.exceptions.ShippingNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,6 +35,7 @@ public class GlobalExceptionHandler {
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.BAD_REQUEST);
         body.put("message", ex.getMessage());
+        body.put("path", "/auth/login");
 
         return ResponseEntity.status(400).body(body);
     }
@@ -43,6 +46,7 @@ public class GlobalExceptionHandler {
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.NOT_FOUND);
         body.put("message", ex.getMessage());
+        body.put("path", "/auth/login");
 
         return ResponseEntity.status(404).body(body);
     }
@@ -53,6 +57,7 @@ public class GlobalExceptionHandler {
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.CONFLICT);
         body.put("message", ex.getMessage());
+        body.put("path", "/auth/register");
 
         return ResponseEntity.status(409).body(body);
     }
@@ -63,6 +68,7 @@ public class GlobalExceptionHandler {
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.BAD_REQUEST);
         body.put("message", ex.getMessage());
+        body.put("path", "/shipping");
 
         return ResponseEntity.status(400).body(body);
     }
@@ -73,6 +79,7 @@ public class GlobalExceptionHandler {
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.NOT_FOUND);
         body.put("message", ex.getMessage());
+        body.put("path", "/shipping");
 
         return ResponseEntity.status(404).body(body);
     }
@@ -83,7 +90,29 @@ public class GlobalExceptionHandler {
         body.put("timestamp", Instant.now());
         body.put("status", HttpStatus.NOT_FOUND);
         body.put("message", ex.getMessage());
+        body.put("path", "/communication");
 
         return ResponseEntity.status(404).body(body);
+    }
+
+    @ExceptionHandler(OfferNotFoundException.class)
+    private ResponseEntity<Map<String, Object>> handleOfferNotFound(OfferNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", Instant.now());
+        body.put("status", HttpStatus.NOT_FOUND);
+        body.put("message", ex.getMessage());
+        body.put("path", "/communication/offer");
+
+        return ResponseEntity.status(404).body(body);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    private ResponseEntity<Map<String, Object>> handleConstraintViolation(ConstraintViolationException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", Instant.now());
+        body.put("status", HttpStatus.BAD_REQUEST);
+        body.put("message", "Validation failed: " + ex.getMessage());
+
+        return ResponseEntity.status(400).body(body);
     }
 }
