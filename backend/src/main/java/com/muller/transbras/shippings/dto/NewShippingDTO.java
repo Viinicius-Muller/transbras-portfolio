@@ -2,11 +2,11 @@ package com.muller.transbras.shippings.dto;
 
 import jakarta.validation.constraints.*;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public record NewShippingDTO(
         @NotNull(message = "Date must not be null")
-        Instant scheduledDate,
+        LocalDate scheduledDate,
         @NotBlank(message = "Origin location must not be blank")
         String from,
         @NotBlank(message = "Destiny location must not be blank")

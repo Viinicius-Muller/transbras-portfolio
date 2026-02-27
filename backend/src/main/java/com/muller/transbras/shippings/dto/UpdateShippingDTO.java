@@ -5,9 +5,10 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public record UpdateShippingDTO(
-        Instant scheduledDate,
+        LocalDate scheduledDate,
         String from,
         String to,
         String cargoType,

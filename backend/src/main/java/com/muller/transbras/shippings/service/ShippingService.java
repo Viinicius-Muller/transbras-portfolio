@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class ShippingService {
 
     @Transactional
     public ListShippingDTO createShipping(NewShippingDTO dto) {
-        if (Instant.now().isAfter(dto.scheduledDate()))
-            throw new BadScheduledDateException("Scheduled date must be in the future");
+        if (LocalDate.now().isEqual(dto.scheduledDate()) || LocalDate.now().isAfter(dto.scheduledDate()))
+            throw new BadScheduledDateException("Scheduled date must at least a day be in the future");
         Shipping shipping = new Shipping();
 
         shipping.setCreatedAt(Instant.now());
@@ -53,8 +54,8 @@ public class ShippingService {
 
     @Transactional
     public ListShippingDTO updateShipping(Long id, UpdateShippingDTO dto){
-        if (Instant.now().plus(1, ChronoUnit.DAYS).isAfter(dto.scheduledDate()))
-            throw new BadScheduledDateException("Scheduled date must be at least 24 hours in the future");
+        if (LocalDate.now().isEqual(dto.scheduledDate()) || LocalDate.now().isAfter(dto.scheduledDate()))
+            throw new BadScheduledDateException("Scheduled date must be at least a day in the future");
 
         Shipping shipping = shippingRepository.findById(id)
                 .orElseThrow(() -> new ShippingNotFoundException("No Shipping with this Id"));

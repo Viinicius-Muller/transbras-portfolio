@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Shipping {
     private List<Offer> offers = new ArrayList<>();
 
     @Column(nullable = false)
-    private Instant scheduledDate;
+    private LocalDate scheduledDate;
 
     @Column(nullable = false)
     private Instant createdAt;

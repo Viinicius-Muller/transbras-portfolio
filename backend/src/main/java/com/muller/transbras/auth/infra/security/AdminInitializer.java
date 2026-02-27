@@ -26,7 +26,7 @@ public class AdminInitializer {
             if (userRepository.findByUsername("admin").isEmpty()) {
                 User adminUser = new User();
                 adminUser.setUsername("admin");
-                adminUser.setPassword(passwordEncoder.encode(adminPass)); // Encode the password
+                adminUser.setPassword(passwordEncoder.encode(adminPass));
                 adminUser.setRole(UserRole.ADMIN);
                 userRepository.save(adminUser);
                 System.out.println("Default admin account created.");
