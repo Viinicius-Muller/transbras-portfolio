@@ -17,6 +17,7 @@ public record NewOfferDTO(
         @Min(value = 100, message = "Initial value must be at least 100")
         @Max(value = 999999, message = "Initial value must be less than 1 million")
         BigDecimal initialValue,
+        @Size(min = 0, max= 250)
         String message
 ) {
 }

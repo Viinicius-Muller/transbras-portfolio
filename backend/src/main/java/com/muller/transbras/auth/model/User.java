@@ -19,11 +19,11 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 50)
-    @Size(min = 6, max = 50, message = "Username must be within 6 to 70 characters")
+    @Size(min = 5, max = 50, message = "Username must be within 5 to 70 characters")
     private String username;
 
     @Column(nullable = false, length = 70)
-    @Size(min = 6, max = 70, message = "Password must be within 6 to 70 characters")
+    @Size(min = 5, max = 70, message = "Password must be within 5 to 70 characters")
     private String password;
 
     @Column(nullable = false)
