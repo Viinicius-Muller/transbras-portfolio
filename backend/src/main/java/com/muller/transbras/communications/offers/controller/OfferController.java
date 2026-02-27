@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/communication/offer")
 @RequiredArgsConstructor
@@ -20,24 +22,24 @@ public class OfferController {
     private final OfferService offerService;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid NewOfferDTO dto) {
+    public ResponseEntity<ListOfferDTO> create(@RequestBody @Valid NewOfferDTO dto) {
         ListOfferDTO newOffer = offerService.createOffer(dto);
         return ResponseEntity.ok().body(newOffer);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         offerService.deleteOffer(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity list() {
+    public ResponseEntity<List<ListOfferDTO>> list() {
         return ResponseEntity.ok().body(offerService.getOffers());
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity updateStatus(@PathVariable Long id, @RequestBody @Valid UpdateStatusDTO dto) {
+    public ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestBody @Valid UpdateStatusDTO dto) {
         offerService.updateOfferStatus(id, dto);
         return ResponseEntity.ok().build();
     }

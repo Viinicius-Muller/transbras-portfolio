@@ -24,8 +24,8 @@ public class ShippingService {
 
     @Transactional
     public ListShippingDTO createShipping(NewShippingDTO dto) {
-        if (Instant.now().plus(1, ChronoUnit.DAYS).isAfter(dto.scheduledDate()))
-            throw new BadScheduledDateException("Scheduled date must be at least 24 hours in the future");
+        if (Instant.now().isAfter(dto.scheduledDate()))
+            throw new BadScheduledDateException("Scheduled date must be in the future");
         Shipping shipping = new Shipping();
 
         shipping.setCreatedAt(Instant.now());

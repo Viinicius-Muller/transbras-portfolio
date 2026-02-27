@@ -19,19 +19,19 @@ public class PartnershipController {
     private PartnershipService partnershipService;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid NewPartershipMsgDTO dto) {
+    public ResponseEntity<ListPartnershipMsgDTO> create(@RequestBody @Valid NewPartershipMsgDTO dto) {
         ListPartnershipMsgDTO newMessage = partnershipService.createMessage(dto);
         return ResponseEntity.ok().body(newMessage);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         partnershipService.deleteMessage(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<ListPartnershipMsgDTO>> getAll() {
         List<ListPartnershipMsgDTO> messages = partnershipService.getMessages();
         return ResponseEntity.ok().body(messages);
     }

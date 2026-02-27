@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/communication/apply")
 public class ApplianceController {
@@ -15,19 +17,19 @@ public class ApplianceController {
     private ApplianceService applianceService;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid NewApplianceDTO dto) {
+    public ResponseEntity<ListApplianceDTO> create(@RequestBody @Valid NewApplianceDTO dto) {
         ListApplianceDTO newAppliance = applianceService.registerAppliance(dto);
         return ResponseEntity.ok().body(newAppliance);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         applianceService.deleteAppliance(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity get() {
+    public ResponseEntity<List<ListApplianceDTO>> get() {
         return ResponseEntity.ok().body(applianceService.getAppliances());
     }
 }

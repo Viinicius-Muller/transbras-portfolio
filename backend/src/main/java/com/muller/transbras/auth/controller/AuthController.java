@@ -5,6 +5,7 @@ import com.muller.transbras.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,33 +20,34 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginDTO dto) {
+    public ResponseEntity<ResponseDTO> login(@RequestBody @Valid LoginDTO dto) {
         ResponseDTO responseDTO = authService.loginUser(dto);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        return ResponseEntity.ok().body(responseDTO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO dto) {
+    public ResponseEntity<ResponseDTO> register(@RequestBody @Valid RegisterDTO dto) {
         ResponseDTO responseDTO = authService.registerUser(dto);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        return ResponseEntity.ok().body(responseDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
-        authService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+                                       @RequestHeader("authorization") String tokenHeader) {
+        authService.deleteUser(id, tokenHeader);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id,
+    public ResponseEntity<Void> update(@PathVariable Long id,
                                  @RequestBody @Valid UpdateDTO dto) throws Exception {
         authService.updateUser(id, dto);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping()
     public ResponseEntity<List<ListUserDTO>> listUsers() {
         List<ListUserDTO> users = authService.getUsers();
-        return ResponseEntity.status(HttpStatus.OK).body(users);
+        return ResponseEntity.ok().body(users);
     }
 }

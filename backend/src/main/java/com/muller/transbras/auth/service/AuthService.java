@@ -36,9 +36,7 @@ public class AuthService {
 
         user.setUsername(dto.username());
         user.setPassword(encodedPass);
-
-        if(dto.username().equals("adminn")) user.setRole(UserRole.ADMIN);
-        else user.setRole(UserRole.USER);
+        user.setRole(UserRole.ADMIN);
 
         var token = tokenService.generateToken(user);
         userRepository.save(user);
@@ -69,7 +67,10 @@ public class AuthService {
     }
 
     @Transactional
-    public void deleteUser(Long id) {
+    public void deleteUser(Long id, String tokenHeader) {
+        if (id.equals(tokenService.getUserIdByToken(tokenHeader)))
+            throw new RuntimeException("Can't delete the same user making the request");
+
         if (!userRepository.existsById(id)) throw new UserNotFoundException("User not found");
         userRepository.deleteById(id);
     }
