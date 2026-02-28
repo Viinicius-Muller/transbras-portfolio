@@ -23,10 +23,10 @@ public class AuthService {
     private final UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     @Transactional
     public ResponseDTO registerUser(RegisterDTO dto) {
@@ -71,7 +71,9 @@ public class AuthService {
         if (id.equals(tokenService.getUserIdByToken(tokenHeader)))
             throw new RuntimeException("Can't delete the same user making the request");
 
-        if (!userRepository.existsById(id)) throw new UserNotFoundException("User not found");
+        if (!userRepository.existsById(id))
+            throw new UserNotFoundException("User not found by Id");
+
         userRepository.deleteById(id);
     }
 

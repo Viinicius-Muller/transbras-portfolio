@@ -49,8 +49,18 @@ public class TokenService {
         }
     }
 
-    public Long getUserIdByToken(String token) {
-        return validateToken(token).getClaim("id").asLong();
+    public Long getUserIdByToken(String tokenHeader ) {
+        String token = this.formatToken(tokenHeader);
+        DecodedJWT decodedJWT = this.validateToken(token);
+
+        if (decodedJWT == null)
+            throw new RuntimeException("Invalid token");
+
+        return decodedJWT.getClaim("id").asLong();
+    }
+
+    public String formatToken(String tokenHeader) {
+        return tokenHeader.replace("Bearer ","");
     }
 
     public Instant generateExpiration() {

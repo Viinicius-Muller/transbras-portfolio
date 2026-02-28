@@ -3,10 +3,11 @@ package com.muller.transbras.shippings.dto;
 import com.muller.transbras.shippings.model.Shipping;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public record ListShippingDTO(
         Long id,
-        Instant scheduledDate,
+        LocalDate scheduledDate,
         String from,
         String to,
         String cargoType,
