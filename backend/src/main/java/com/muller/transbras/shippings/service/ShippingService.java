@@ -29,6 +29,8 @@ public class ShippingService {
             throw new BadScheduledDateException("Scheduled date must at least a day be in the future");
         Shipping shipping = new Shipping();
 
+        System.out.println(dto.scheduledDate());
+
         shipping.setCreatedAt(Instant.now());
         shipping.setScheduledDate(dto.scheduledDate());
         shipping.setFrom(dto.from());
@@ -38,6 +40,8 @@ public class ShippingService {
         shipping.setDistance(dto.distance());
 
         shippingRepository.save(shipping);
+
+        System.out.println(new ListShippingDTO(shipping));
         return new ListShippingDTO(shipping);
     }
 
