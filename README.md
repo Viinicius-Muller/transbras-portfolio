@@ -76,7 +76,6 @@ Usuário → Frontend (Next.js) → Backend (API Spring Boot) → PostgreSQL
 - Lombok
 
 ### DevOps & Ferramentas
-- Docker & Docker Compose
 - PostgreSQL
 - Swagger UI
 - Postman
@@ -84,19 +83,6 @@ Usuário → Frontend (Next.js) → Backend (API Spring Boot) → PostgreSQL
 ---
 
 ## 🚀 Guia Rápido e Instalação
-
-### 🐳 Configuração com Docker (Recomendado)
-```bash
-# Clonar o repositório
-git clone https://github.com/Viinicius-Muller/transbras-portfolio.git
-cd transbras-portfolio
-
-# Iniciar contêineres (banco de dados + backend)
-docker-compose up --build
-```
-Serviços iniciados:
-- Banco de Dados PostgreSQL
-- API Spring Boot
 
 ### 📦 Backend (Execução Local)
 ```bash
@@ -144,6 +130,13 @@ DATABASE_USERNAME
 DATABASE_PASSWORD
 AUTH_SECRET
 ADMIN_PASSWORD
+```
+
+#### Frontend (.env)
+
+```env
+API_BASE_URL
+NEXT_PUBLIC_API_BASE_URL
 ```
 
 ---
